@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * Usage: php tools\scaffold-module.php <ModuleName> [owner-team]
  *
- * Example: php tools\scaffold-module.php accounting @drongo-org/accounting-module
+ * Example: php tools\scaffold-module.php accounting @Droongo/accounting-module
  */
 
 if ($argc < 2) {
@@ -17,7 +17,7 @@ if ($argc < 2) {
 
 $moduleName = Str::studly($argv[1]);
 $moduleKey  = Str::snake($moduleName);
-$ownerTeam  = $argv[2] ?? '@drongo-org/platform-team';
+$ownerTeam  = $argv[2] ?? '@Droongo/platform-team';
 $root       = __DIR__ . '/..';
 $moduleDir  = "$root/modules/$moduleKey";
 

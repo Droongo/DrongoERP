@@ -18,7 +18,7 @@
       "module": {
         "name": "sales",
         "displayName": "Sales",
-        "ownerTeam": "@drongo-org/sales-module",
+        "ownerTeam": "@Droongo/sales-module",
         "dependsOn": ["inventory"],
         "dbSchema": "sal_",
         "namespacePrefix": "Drongo\\Module\\Sales"

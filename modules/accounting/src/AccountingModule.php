@@ -20,7 +20,7 @@ class AccountingModule
         $kernel->registerModule('accounting', [
             'displayName' => 'Accounting',
             'version' => '1.0.0',
-            'ownerTeam' => '@drongo-org/accounting-module',
+            'ownerTeam' => '@Droongo/accounting-module',
             'dbSchema' => 'acct_',
             'routes' => __DIR__ . '/../config/routes.php',
         ]);

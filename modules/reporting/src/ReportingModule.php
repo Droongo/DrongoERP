@@ -20,7 +20,7 @@ class ReportingModule
     {
         $kernel->registerModule('reporting', [
             'displayName' => 'Reporting',
-            'ownerTeam' => '@drongo-org/reporting-module',
+            'ownerTeam' => '@Droongo/reporting-module',
             'dbSchema' => 'rpt_',
             'dependsOn' => ['sales', 'inventory'],
         ]);

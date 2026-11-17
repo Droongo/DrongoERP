@@ -19,7 +19,7 @@
       "module": {
         "name": "reporting",
         "displayName": "Reporting",
-        "ownerTeam": "@drongo-org/reporting-module",
+        "ownerTeam": "@Droongo/reporting-module",
         "dependsOn": ["sales", "inventory"],
         "dbSchema": "rpt_",
         "namespacePrefix": "Drongo\\Module\\Reporting"

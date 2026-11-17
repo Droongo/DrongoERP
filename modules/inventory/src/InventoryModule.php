@@ -18,7 +18,7 @@ class InventoryModule
     {
         $kernel->registerModule('inventory', [
             'displayName' => 'Inventory',
-            'ownerTeam' => '@drongo-org/inventory-module',
+            'ownerTeam' => '@Droongo/inventory-module',
             'dbSchema' => 'inv_',
             'dependsOn' => [],
         ]);

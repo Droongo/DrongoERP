@@ -19,7 +19,7 @@ class SalesModule
     {
         $kernel->registerModule('sales', [
             'displayName' => 'Sales',
-            'ownerTeam' => '@drongo-org/sales-module',
+            'ownerTeam' => '@Droongo/sales-module',
             'dbSchema' => 'sal_',
             'dependsOn' => ['inventory'],
         ]);

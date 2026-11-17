@@ -17,7 +17,7 @@
       "module": {
         "name": "inventory",
         "displayName": "Inventory",
-        "ownerTeam": "@drongo-org/inventory-module",
+        "ownerTeam": "@Droongo/inventory-module",
         "dependsOn": [],
         "dbSchema": "inv_",
         "namespacePrefix": "Drongo\\Module\\Inventory"

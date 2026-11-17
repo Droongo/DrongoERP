@@ -128,11 +128,11 @@ Are you changing another module's files?
 ## Example directory ownership
 
 ```
-modules/sales/              @drongo-org/sales-module   (team A)
-modules/inventory/          @drongo-org/inventory-module (team B)
-modules/reporting/          @drongo-org/reporting-module (team C)
-packages/core/              @drongo-org/platform-team     (shared contracts)
-apps/api/                   @drongo-org/backend-leads     (wiring only)
+modules/sales/              @Droongo/sales-module   (team A)
+modules/inventory/          @Droongo/inventory-module (team B)
+modules/reporting/          @Droongo/reporting-module (team C)
+packages/core/              @Droongo/platform-team     (shared contracts)
+apps/api/                   @Droongo/backend-leads     (wiring only)
 ```
 
 Team A (Sales) never needs access to `modules/inventory/` or `modules/reporting/`.

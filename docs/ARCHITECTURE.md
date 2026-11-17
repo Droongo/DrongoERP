@@ -38,7 +38,7 @@ Every `modules/<name>` must contain:
 {
   "name": "accounting",
   "displayName": "Accounting",
-  "ownerTeam": "@drongo-org/accounting-module",
+  "ownerTeam": "@Droongo/accounting-module",
   "dependsOn": [],
   "dbSchema": "acct_",
   "namespacePrefix": "Drongo\\Module\\Accounting"
