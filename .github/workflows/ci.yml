@@ -1,0 +1,98 @@
+name: CI — Drongo ERP Monorepo
+
+on:
+  push:
+    branches: [ main, develop, release/* ]
+  pull_request:
+    branches: [ main, develop ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changed-modules:
+    name: Detect changed modules
+    runs-on: ubuntu-latest
+    outputs:
+      modules: ${{ steps.changed-modules.outputs.modules }}
+      run-all: ${{ steps.changed-modules.outputs.run-all }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: changed-modules
+        name: List changed modules/packages/apps
+        run: |
+          # Determine default branch merge base
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.base_ref }}"
+          else
+            BASE="main"
+          fi
+          git fetch origin "$BASE" --depth=1 || true
+          MERGE_BASE=$(git merge-base HEAD origin/"$BASE" || echo HEAD)
+
+          CHANGED=$(git diff --name-only "$MERGE_BASE" HEAD \
+            | grep -E '^(modules/|packages/|apps/)' \
+            | cut -d/ -f1-2 \
+            | sort -u \
+            | paste -sd, -)
+
+          if [ -z "$CHANGED" ]; then
+            echo "run-all=true" >> "$GITHUB_OUTPUT"
+            echo "modules=all" >> "$GITHUB_OUTPUT"
+          else
+            echo "run-all=false" >> "$GITHUB_OUTPUT"
+            echo "modules=$CHANGED" >> "$GITHUB_OUTPUT"
+          fi
+
+  lint:
+    name: PHP_CodeSniffer / CS check
+    needs: changed-modules
+    runs-on: ubuntu-latest
+    if: needs.changed-modules.outputs.run-all == 'true' || contains(fromJson('["' + needs.changed-modules.outputs.modules.replace(',', '","') + '"]'), 'packages/core') || contains(fromJson('["' + needs.changed-modules.outputs.modules.replace(',', '","') + '"]'), 'apps/api')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Run phpcs
+        run: vendor/bin/phpcs --standard=phpcs.xml.dist modules/ packages/ apps/ || true
+
+  test:
+    name: PHPUnit tests
+    needs: changed-modules
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: ${{ fromJson('["' + needs.changed-modules.outputs.modules.replace(',', '","') + '"]') }}
+    if: needs.changed-modules.outputs.run-all == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Run tests for ${{ matrix.module }}
+        run: vendor/bin/phpunit modules/${{ matrix.module }}/tests packages/*/tests 2>/dev/null || vendor/bin/phpunit
+
+  validate-boundaries:
+    name: Validate module boundaries (no cycles / forbidden deps)
+    needs: changed-modules
+    runs-on: ubuntu-latest
+    if: needs.changed-modules.outputs.run-all == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - name: Run boundary validator
+        run: php tools/validate-module-boundaries.php

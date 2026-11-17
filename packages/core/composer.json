@@ -1,0 +1,14 @@
+{
+  "name": "drongo/package-core",
+  "description": "Drongo ERP — Shared core library (kernel, events, db, auth helpers)",
+  "type": "library",
+  "license": "proprietary",
+  "require": {
+    "php": "^8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Drongo\\Core\\": "src/"
+    }
+  }
+}

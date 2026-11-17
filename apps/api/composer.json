@@ -1,0 +1,16 @@
+{
+  "name": "drongo/app-api",
+  "description": "Drongo ERP — Main API application",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": "^8.1",
+    "drongo/package-core": "self.version",
+    "drongo/module-accounting": "self.version"
+  },
+  "autoload": {
+    "psr-4": {
+      "Drongo\\App\\Api\\": "src/"
+    }
+  }
+}

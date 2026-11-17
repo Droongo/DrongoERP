@@ -1,0 +1,16 @@
+# Mirror of .github/CODEOWNERS so GitHub picks it up from repo root too.
+# See .github/CODEOWNERS for the full rules.
+
+*                                       @drongo-org/backend-leads @drongo-org/platform-team
+/modules/accounting/                    @drongo-org/accounting-module
+/modules/inventory/                     @drongo-org/inventory-module
+/modules/hr/                            @drongo-org/hr-module
+/modules/sales/                         @drongo-org/sales-module
+/modules/crm/                           @drongo-org/crm-module
+/packages/                              @drongo-org/platform-team
+/apps/api/                              @drongo-org/backend-leads
+/apps/web/                              @drongo-org/frontend-leads
+/.github/                               @drongo-org/repo-admins
+/scripts/                               @drongo-org/platform-team
+/tools/                                 @drongo-org/platform-team
+/composer.json                          @drongo-org/backend-leads @drongo-org/platform-team

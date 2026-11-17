@@ -1,0 +1,48 @@
+{
+  "name": "drongo/erp-monorepo",
+  "description": "Drongo ERP monorepo — 50+ modular business modules",
+  "type": "project",
+  "license": "proprietary",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "require": {
+    "php": "^8.1",
+    "composer/composer": "^2.6",
+    "composer/merge-plugin": "^2.1 || ^3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.0",
+    "squizlabs/php_codesniffer": "^3.9",
+    "friendsofphp/php-cs-fixer": "^3.54"
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/merge-plugin": true
+    },
+    "sort-packages": true
+  },
+  "extra": {
+    "merge-plugin": {
+      "include": [
+        "modules/*/composer.json",
+        "packages/*/composer.json",
+        "apps/*/composer.json"
+      ],
+      "recurse": false,
+      "replace": false,
+      "merge-extra": false
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "@php tools/validate-module-boundaries.php"
+    ],
+    "post-update-cmd": [
+      "@php tools/validate-module-boundaries.php"
+    ],
+    "cs-check": "phpcs",
+    "cs-fix": "phpcbf",
+    "test": "phpunit",
+    "validate": "@php tools/validate-module-boundaries.php"
+  }
+}

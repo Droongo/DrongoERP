@@ -1,0 +1,30 @@
+# Composer
+/vendor/
+/composer.lock
+
+# IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / runtime
+*.log
+runtime/
+storage/logs/
+
+# Tests coverage
+coverage/
+phpunit.cache
+
+# Env
+.env
+.env.local
+
+# Build artifacts
+/build/
+/dist/

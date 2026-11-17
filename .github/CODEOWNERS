@@ -1,0 +1,59 @@
+# =============================================================================
+# Drongo ERP — CODEOWNERS
+# File: .github/CODEOWNERS (also mirrored at root CODEOWNERS)
+# =============================================================================
+# Syntax: pattern       @team-or-user   @team-or-user
+# The LAST matching pattern wins.
+
+# ---------------------------------------------------------------
+# 1. Default owners — everything not explicitly claimed below
+# ---------------------------------------------------------------
+*                                       @drongo-org/backend-leads @drongo-org/platform-team
+
+# ---------------------------------------------------------------
+# 2. Module owners — each business module gets its own team
+# ---------------------------------------------------------------
+/modules/accounting/                    @drongo-org/accounting-module
+/modules/inventory/                     @drongo-org/inventory-module
+/modules/hr/                            @drongo-org/hr-module
+/modules/sales/                         @drongo-org/sales-module
+/modules/crm/                           @drongo-org/crm-module
+/modules/purchasing/                    @drongo-org/purchasing-module
+/modules/manufacturing/                 @drongo-org/manufacturing-module
+/modules/pos/                           @drongo-org/pos-module
+/modules/ecommerce/                     @drongo-org/ecommerce-module
+/modules/reporting/                     @drongo-org/reporting-module
+
+# ---------------------------------------------------------------
+# 3. Shared packages (kernel, db, auth, etc.)
+# ---------------------------------------------------------------
+/packages/                              @drongo-org/platform-team
+
+# ---------------------------------------------------------------
+# 4. Deployable applications
+# ---------------------------------------------------------------
+/apps/api/                              @drongo-org/backend-leads
+/apps/web/                              @drongo-org/frontend-leads
+/apps/admin/                            @drongo-org/frontend-leads
+
+# ---------------------------------------------------------------
+# 5. GitHub config itself
+# ---------------------------------------------------------------
+/.github/                               @drongo-org/repo-admins
+/codeowners                             @drongo-org/repo-admins
+/.github/CODEOWNERS                     @drongo-org/repo-admins
+
+# ---------------------------------------------------------------
+# 6. Docs & tooling (lighter review)
+# ---------------------------------------------------------------
+/docs/                                  @drongo-org/tech-writers
+/scripts/                               @drongo-org/platform-team
+/tools/                                 @drongo-org/platform-team
+
+# ---------------------------------------------------------------
+# 7. Root files
+# ---------------------------------------------------------------
+/composer.json                          @drongo-org/backend-leads @drongo-org/platform-team
+/package.json                           @drongo-org/frontend-leads
+/README.md                              @drongo-org/tech-writers
+/CONTRIBUTING.md                        @drongo-org/repo-admins
