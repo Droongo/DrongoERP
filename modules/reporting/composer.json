@@ -1,0 +1,29 @@
+{
+  "name": "drongo/module-reporting",
+  "description": "Drongo ERP — Reporting module (read models, dashboards)",
+  "type": "library",
+  "license": "proprietary",
+  "require": {
+    "php": "^8.1",
+    "drongo/package-core": "self.version",
+    "drongo/module-sales": "self.version",
+    "drongo/module-inventory": "self.version"
+  },
+  "autoload": {
+    "psr-4": {
+      "Drongo\\Module\\Reporting\\": "src/"
+    }
+  },
+  "extra": {
+    "drongo": {
+      "module": {
+        "name": "reporting",
+        "displayName": "Reporting",
+        "ownerTeam": "@drongo-org/reporting-module",
+        "dependsOn": ["sales", "inventory"],
+        "dbSchema": "rpt_",
+        "namespacePrefix": "Drongo\\Module\\Reporting"
+      }
+    }
+  }
+}

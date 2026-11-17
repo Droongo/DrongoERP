@@ -35,6 +35,33 @@ See `docs/ARCHITECTURE.md` section "Adding a new module", then run:
 php tools/scaffold-module.php accounting   # (template script you can build)
 ```
 
+## Inter-module coordination (Sales ↔ Inventory ↔ Reporting)
+
+When your module needs to work with another module:
+
+| Situation | What to do | File to touch |
+|-----------|-----------|---------------|
+| You need another module to perform an action | Call its public service via `Kernel::getService()` or constructor-injected interface | Your module's `src/` only |
+| You need to tell others something happened | Emit a `DomainEvent` via `Kernel::emit()` | Your module's `src/` only |
+| You need to react to another module | Subscribe to its event in `Module::boot()` | Your module's `src/` only |
+| Another module needs to change | Open a **separate PR** in that module's folder | That module's folder (owned by their team) |
+
+### Rules (enforced by CI + CODEOWNERS)
+
+1. **Declare dependencies.** If your module references `Drongo\Module\<Other>\`, add `<Other>` to `extra.drongo.module.dependsOn` in your `composer.json`.
+2. **No `Internal\` access.** Never reference another module's `Drongo\Module\<Other>\Internal\` namespace.
+3. **Only edit your own module.** A PR for `modules/sales/` must not contain changes under `modules/inventory/` or any other module.
+4. **Depend on interfaces, not concretions.** Put shared contracts in `packages/core/Contracts/`.
+5. **Own your schema.** Use your `dbSchema` table prefix. Never join another module's tables directly.
+
+### Pull request requirements for interconnected modules
+
+If your PR touches a module that other modules depend on (e.g. you change `modules/inventory/`):
+
+- The dependent module's team is auto-requested as reviewer via `CODEOWNERS`.
+- CI runs `validate-module-boundaries` — cycles and undeclared dependencies block the merge.
+- If you change Inventory's public interface (`InventoryServiceInterface` in `packages/core`), the Platform team must approve, and all consumers (Sales, etc.) must be verified compatible.
+
 ## Releases
 
 - Modules are versioned independently in their `composer.json`.

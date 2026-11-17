@@ -88,7 +88,7 @@ jobs:
     name: Validate module boundaries (no cycles / forbidden deps)
     needs: changed-modules
     runs-on: ubuntu-latest
-    if: needs.changed-modules.outputs.run-all == 'true'
+    if: always()
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2

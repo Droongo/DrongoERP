@@ -56,6 +56,17 @@ Every `modules/<name>` must contain:
 3. **Declare dependencies.** If module A needs module B, add B to `extra.drongo.module.dependsOn` in A's `composer.json`.
 4. **No cycles.** The dependency graph must remain a DAG. CI runs `tools/validate-module-boundaries.php` on every PR.
 
+### Supported inter-module patterns
+
+| Pattern | Use when | Example |
+|---------|----------|---------|
+| Public service call | Module A needs Module B to act synchronously | Sales reserves stock via `InventoryServiceInterface` |
+| Domain event (pub/sub) | Module A notifies others without knowing who listens | Sales emits `OrderPlaced`; Reporting + Inventory react |
+| Kernel service lookup | Module A needs read-only data from Module B | Reporting reads a total via `Kernel::getService()` |
+
+See `docs/MODULE_INTERCONNECTS.md` for detailed scenarios (Sales ↔ Inventory ↔ Reporting)
+and the golden rules your team must follow.
+
 ## 4. Database strategy
 
 - Each module owns tables prefixed with its `dbSchema` (e.g., `acct_ledger_entries`, `inv_stock_items`).

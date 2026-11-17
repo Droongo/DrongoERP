@@ -1,0 +1,27 @@
+{
+  "name": "drongo/module-inventory",
+  "description": "Drongo ERP — Inventory module (stock, reservations, warehouses)",
+  "type": "library",
+  "license": "proprietary",
+  "require": {
+    "php": "^8.1",
+    "drongo/package-core": "self.version"
+  },
+  "autoload": {
+    "psr-4": {
+      "Drongo\\Module\\Inventory\\": "src/"
+    }
+  },
+  "extra": {
+    "drongo": {
+      "module": {
+        "name": "inventory",
+        "displayName": "Inventory",
+        "ownerTeam": "@drongo-org/inventory-module",
+        "dependsOn": [],
+        "dbSchema": "inv_",
+        "namespacePrefix": "Drongo\\Module\\Inventory"
+      }
+    }
+  }
+}

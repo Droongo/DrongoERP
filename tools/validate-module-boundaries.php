@@ -9,6 +9,9 @@ declare(strict_types=1);
  *  1. No circular dependencies between modules.
  *  2. Modules only depend on declared modules in their composer.json `extra.drongo.module.dependsOn`.
  *  3. No module imports another module's `Internal\` namespace.
+ *  4. If a module references another module's public namespace
+ *     (`Drongo\Module\<Other>\...`) that other module MUST be listed in
+ *     `dependsOn`. Shared packages (`Drongo\Core\*`) are exempt.
  *
  * Run:  php tools/validate-module-boundaries.php
  * Exit codes: 0 = OK, 1 = violation found.
@@ -69,7 +72,8 @@ function dfs(string $node, array &$graph, array &$color, array &$stack, array &$
 
 foreach ($moduleGraph as $node => $data) {
     if ($color[$node] === $WHITE) {
-        dfs($node, $moduleGraph, $color, [], $violations);
+        $stack = [];
+        dfs($node, $moduleGraph, $color, $stack, $violations);
     }
 }
 
@@ -90,6 +94,54 @@ foreach ($moduleGraph as $consumer => $data) {
             $internalNs = $otherData['namespace'] . '\\Internal\\';
             if (strpos($content, $internalNs) !== false) {
                 $violations[] = "Module '$consumer' accesses internals of module '$other' ({$internalNs}). Use its public API instead.";
+            }
+        }
+    }
+}
+
+// --- 4. Public cross-module usage requires declared dependency ---
+foreach ($moduleGraph as $consumer => $data) {
+    $consumerPath = realpath($data['path']);
+    if (!$consumerPath) {
+        continue;
+    }
+
+    $srcIterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($consumerPath . '/src', RecursiveDirectoryIterator::SKIP_DOTS)
+    );
+    foreach ($srcIterator as $phpFile) {
+        if ($phpFile->getExtension() !== 'php') {
+            continue;
+        }
+        $content = file_get_contents($phpFile->getPathname());
+        if ($content === false) {
+            continue;
+        }
+
+        // Match `use Drongo\Module\<Module>\...;` (non-Internal)
+        if (preg_match_all(
+            '/^use\s+(Drongo\\\\Module\\\\([^\\\\]+)\\\\.+);/m',
+            $content,
+            $matches,
+            PREG_SET_ORDER
+        )) {
+            foreach ($matches as $match) {
+                $other = $match[2];
+                if (in_array('Internal', explode('\\', $match[1]), true)) {
+                    continue; // already covered by check #3
+                }
+                if (!isset($moduleGraph[$other])) {
+                    continue;
+                }
+                $declared = $data['dependsOn'] ?? [];
+                if (!in_array($other, $declared, true)) {
+                    $violations[] = sprintf(
+                        "Module '%s' uses public namespace '%s' but does not declare '%s' in extra.drongo.module.dependsOn.",
+                        $consumer,
+                        $match[1],
+                        $other
+                    );
+                }
             }
         }
     }
